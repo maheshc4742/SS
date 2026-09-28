@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScriptSense — AI Answer Evaluation & HITL Fine-Tuning</title>
+  <meta name="description" content="Automated evaluation of descriptive handwritten answer scripts using Vision AI, semantic analysis, rubric-based grading, and Human-In-The-Loop continuous learning.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="header-nav">
+    <div class="brand-section">
+      <div class="brand-logo-icon">§</div>
+      <div>
+        <h1 class="brand-title">ScriptSense</h1>
+        <div class="brand-subtitle">AI Evaluation • HITL Training Loop</div>
+      </div>
+    </div>
+
+    <!-- Mode Switcher -->
+    <div class="mode-switcher" id="mode-switcher" role="tablist">
+      <button class="mode-btn active" id="mode-btn-evaluate" role="tab" aria-selected="true" data-mode="evaluate">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Evaluate Mode
+      </button>
+      <button class="mode-btn" id="mode-btn-train" role="tab" aria-selected="false" data-mode="train">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Train Mode (HITL)
+      </button>
+    </div>
+
+    <!-- System Status Bar -->
+    <div class="system-status-bar">
+      <!-- OCR Provider Pill -->
+      <div class="status-pill" id="pill-ocr" title="Click to toggle OCR Provider">
+        <span class="status-dot dot-indigo" id="ocr-dot"></span>
+        <span>OCR: <strong id="lbl-ocr-provider">GEMINI</strong></span>
+      </div>
+
+      <!-- Active Model Pill -->
+      <div class="status-pill" id="pill-model" title="Click to manage model checkpoints">
+        <span class="status-dot dot-green"></span>
+        <span>Model: <strong id="lbl-active-model">codbert_base</strong></span>
+      </div>
+
+      <!-- Training Stats Pill -->
+      <div class="status-pill" id="pill-training" title="Verified Training Samples">
+        <span class="status-dot dot-amber" id="training-dot"></span>
+        <span>Dataset: <strong id="lbl-training-stats">0/10</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-wrapper">
+
+    <!-- ============================================================== -->
+    <!-- VIEW A: EVALUATE MODE                                          -->
+    <!-- ============================================================== -->
+    <section class="view-container active" id="view-evaluate">
+      <div class="grid-eval">
+        
+        <!-- Left: Upload & Config Column -->
+        <div class="eval-input-column">
+          <div class="panel-card glass">
+            <div class="card-title-row">
+              <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Student Answer Script
+              </div>
+              <span class="status-pill" style="font-size:0.75rem;">Direct Evaluation</span>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div class="dropzone-box" id="dropzone-eval">
+              <input type="file" id="file-input-eval" accept=".jpg,.jpeg,.png,.pdf,.json" style="display:none;">
+              <div class="dropzone-icon">📄</div>
+              <div class="dropzone-title">Click to upload or drag & drop</div>
+              <div class="dropzone-sub">Supports .jpg, .jpeg, .png, .pdf (renders without Tesseract), or .json</div>
+              <div class="file-pill" id="file-pill-eval">
+                <span id="filename-display-eval">filename.pdf</span>
+                <button type="button" id="btn-remove-file-eval" style="background:transparent;border:none;color:#f43f5e;cursor:pointer;font-weight:700;">✕</button>
+              </div>
+            </div>
+
+            <!-- 1-Click Preset Bar -->
+            <div class="preset-bar">
+              <span style="font-size:0.75rem; color:var(--text-dim); display:flex; align-items:center;">Presets:</span>
+              <button type="button" class="btn-preset" id="btn-preset-oop">Load OOP Exam</button>
+              <button type="button" class="btn-preset" id="btn-preset-answers-high">Sample Script (High)</button>
+              <button type="button" class="btn-preset" id="btn-preset-answers-partial">Sample Script (Partial)</button>
+            </div>
+
+            <!-- Accordion: Key Answer JSON -->
+            <div class="accordion-item" id="acc-keys">
+              <div class="accordion-header">
+                <span>🔑 Reference / Key Answers JSON <small id="lbl-key-file-tag" style="color:var(--accent-emerald); font-weight:600;"></small></span>
+                <span class="chevron-icon">▼</span>
+              </div>
+              <div class="accordion-body">
+                <div class="file-picker-row">
+                  <input type="file" id="file-input-keys" accept=".json" style="display:none;">
+                  <button type="button" class="btn-file-select" id="btn-select-key-file">
+                    📁 Select Key Answers File (.json)
+                  </button>
+                  <div class="file-status-indicator" id="key-file-status">No file chosen (using editor text)</div>
+                </div>
+                <textarea class="json-editor" id="editor-key-answers" spellcheck="false" placeholder="Select a key_answers.json file or paste reference answers here..."></textarea>
+              </div>
+            </div>
+
+            <!-- Accordion: Rubric JSON -->
+            <div class="accordion-item" id="acc-rubrics">
+              <div class="accordion-header">
+                <span>📋 Rubrics & Criteria JSON <small id="lbl-rubric-file-tag" style="color:var(--accent-emerald); font-weight:600;"></small></span>
+                <span class="chevron-icon">▼</span>
+              </div>
+              <div class="accordion-body">
+                <div class="file-picker-row">
+                  <input type="file" id="file-input-rubric" accept=".json" style="display:none;">
+                  <button type="button" class="btn-file-select" id="btn-select-rubric-file">
+                    📁 Select Rubric File (.json)
+                  </button>
+                  <div class="file-status-indicator" id="rubric-file-status">No file chosen (using editor text)</div>
+                </div>
+                <textarea class="json-editor" id="editor-rubrics" spellcheck="false" placeholder="Select a rubric.json file or paste rubric criteria here..."></textarea>
+              </div>
+            </div>
+
+            <!-- Accordion: Direct Student Answer JSON (Bypass OCR) -->
+            <div class="accordion-item" id="acc-student-json">
+              <div class="accordion-header">
+                <span>⚡ Student Answer JSON (Bypasses OCR) <small id="lbl-student-file-tag" style="color:var(--accent-emerald); font-weight:600;"></small></span>
+                <span class="chevron-icon">▼</span>
+              </div>
+              <div class="accordion-body">
+                <div class="file-picker-row">
+                  <input type="file" id="file-input-student-json" accept=".json" style="display:none;">
+                  <button type="button" class="btn-file-select" id="btn-select-student-json-file">
+                    📁 Select Student Answer File (.json)
+                  </button>
+                  <div class="file-status-indicator" id="student-json-file-status">No file chosen</div>
+                </div>
+                <textarea class="json-editor" id="editor-student-answers" placeholder='{"1": "Student text...", "2": "Student text..."}' spellcheck="false"></textarea>
+              </div>
+            </div>
+
+            <!-- Evaluate Action Button -->
+            <button class="btn-primary" id="btn-run-evaluate">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Run Automated Evaluation</span>
+            </button>
+            <p style="font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.5rem;">
+              Evaluate mode runs direct scoring & generates a report. Zero HITL intervention.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Results & Scorecard Column -->
+        <div class="eval-results-column">
+          <!-- Initial Welcome / Empty State -->
+          <div class="panel-card glass" id="results-empty-state" style="text-align:center; padding: 4rem 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.8;">🎯</div>
+            <h2 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Ready for Evaluation</h2>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem auto; font-size: 0.9rem;">
+              Upload a student answer script or select a sample exam preset on the left, then click <strong>Run Automated Evaluation</strong>.
+            </p>
+            <button class="btn-preset" id="btn-quick-start" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">
+              Load Demo & Run
+            </button>
+          </div>
+
+          <!-- Active Results Container -->
+          <div id="results-active-container" style="display:none;">
+            <!-- Hero Scorecard -->
+            <div class="scorecard-banner" id="scorecard-banner">
+              <div class="scorecard-grid">
+                <div class="score-circle">
+                  <span class="score-val" id="res-obtained-marks">0</span>
+                  <span class="score-max" id="res-total-marks">/ 0 marks</span>
+                </div>
+                <div class="scorecard-details">
+                  <div class="percentage-badge" id="res-percentage">0.0%</div>
+                  <h3 id="res-tier-title">Evaluation Complete</h3>
+                  <p id="res-overall-summary">Detailed automated evaluation report.</p>
+                </div>
+                <div>
+                  <button class="btn-preset" id="btn-download-report" style="padding: 0.6rem 1.1rem; border-color: var(--border-glow);">
+                    ⬇ Download Report (.json)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Question Cards Container -->
+            <div id="questions-cards-list"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW B: TRAIN MODE & HITL STUDIO                              -->
+    <!-- ============================================================== -->
+    <section class="view-container" id="view-train">
+      
+      <!-- HITL Status Banner -->
+      <div class="hitl-header-banner glass">
+        <div>
+          <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.25rem;">
+            <h2 style="font-size: 1.25rem; font-weight:700;">Human-in-the-Loop Training Studio</h2>
+            <span class="status-tag partially-met" id="lbl-train-readiness">Collecting Annotations</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Human verification is required. Only approved and corrected answers are stored into the fine-tuning dataset.
+          </p>
+          <div class="training-progress-track">
+            <div class="training-progress-fill" id="training-progress-fill"></div>
+          </div>
+          <div style="font-size: 0.76rem; color: var(--text-dim); margin-top: 4px;" id="training-progress-text">
+            Verified Training Samples: 0 / 10
+          </div>
+        </div>
+
+        <div style="display:flex; gap: 0.75rem; align-items:center;">
+          <button class="btn-preset" id="btn-seed-samples" title="Add 10 verified training samples for quick demonstration">
+            ⚡ Seed Demo Samples
+          </button>
+          <button class="btn-finetune" id="btn-start-finetune" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            <span>Start Fine-Tuning</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Train Mode Staging Controls -->
+      <div class="panel-card glass" style="margin-bottom: 1.5rem;">
+        <div class="card-title-row">
+          <div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Stage Answer Script for HITL Review
+          </div>
+          <button class="btn-preset" id="btn-refresh-pending">🔄 Refresh Review Queue</button>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          In Train mode, uploading and evaluating an answer script runs AI inference and sends every question into the pending human review queue.
+        </p>
+
+        <div style="display:flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn-primary" id="btn-stage-sample-train" style="width: auto; padding: 0.65rem 1.5rem;">
+            <span>Stage OOP Sample Script for Review</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pending HITL Review Queue -->
+      <div>
+        <h3 style="font-size: 1.15rem; font-weight:700; margin-bottom: 1rem; display:flex; align-items:center; gap:0.5rem;">
+          <span>Pending Human Verification Queue</span>
+          <span class="status-tag fully-met" id="lbl-pending-badge" style="font-size:0.8rem;">0 Pending</span>
+        </h3>
+
+        <!-- Empty state -->
+        <div class="panel-card glass" id="hitl-empty-state" style="text-align:center; padding: 3rem 1.5rem;">
+          <div style="font-size: 2.5rem; margin-bottom: 0.8rem;">✨</div>
+          <h4 style="font-size: 1.15rem; margin-bottom: 0.3rem;">No Items Awaiting Verification</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Stage an answer script above or click "Stage OOP Sample Script" to populate the review queue.
+          </p>
+        </div>
+
+        <!-- Pending Items Container -->
+        <div id="hitl-items-container"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: MODEL & OCR CONFIGURATION                               -->
+  <!-- ============================================================== -->
+  <div class="modal-overlay" id="modal-settings">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h3 style="font-size: 1.25rem; font-weight: 700;">System Configuration & Models</h3>
+        <button class="modal-close" id="btn-close-modal">✕</button>
+      </div>
+
+      <!-- OCR Switcher -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="font-size: 0.88rem; font-weight: 600; color: #fff; display:block; margin-bottom: 0.5rem;">
+          OCR Vision Provider:
+        </label>
+        <div style="display:flex; gap: 1rem;">
+          <label class="status-pill" style="cursor:pointer;">
+            <input type="radio" name="ocr_choice" value="gemini" id="ocr-choice-gemini">
+            <span>Gemini API (Vision)</span>
+          </label>
+          <label class="status-pill" style="cursor:pointer;">
+            <input type="radio" name="ocr_choice" value="qwen" id="ocr-choice-qwen">
+            <span>Local Qwen (Vision-Language)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Model Versions Table -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="font-size: 0.88rem; font-weight: 600; color: #fff; display:block; margin-bottom: 0.5rem;">
+          Semantic Scoring Checkpoints:
+        </label>
+        <div id="models-table-container" style="max-height: 200px; overflow-y:auto;">
+          <!-- Loaded dynamically -->
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end;">
+        <button class="btn-primary" id="btn-save-settings" style="width: auto; padding: 0.6rem 1.5rem;">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

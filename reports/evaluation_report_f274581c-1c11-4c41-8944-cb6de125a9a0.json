@@ -1,0 +1,60 @@
+{
+    "id": "f274581c-1c11-4c41-8944-cb6de125a9a0",
+    "mode": "evaluate",
+    "model": "codbert_base",
+    "ocr_provider": "gemini",
+    "total_marks": 9.0,
+    "obtained_marks": 0.0,
+    "percentage": 0.0,
+    "overall_summary": "Script evaluated with codbert_base (gemini OCR). Overall score: 0/9 (0.0%). Evaluated 6 descriptive question(s).",
+    "questions": [
+        {
+            "question": "1",
+            "marks": 0.0,
+            "max_marks": 1.0,
+            "semantic_score": 0.0,
+            "confidence": 0.5,
+            "feedback": "Awarded 0 out of 1 marks (0.0%). Semantic similarity: 0%, Confidence: 50%.\nAnswer is insufficient or does not match reference concepts."
+        },
+        {
+            "question": "2",
+            "marks": 0.0,
+            "max_marks": 1.0,
+            "semantic_score": 0.0645,
+            "confidence": 0.5,
+            "feedback": "Awarded 0 out of 1 marks (0.0%). Semantic similarity: 6%, Confidence: 50%.\nAnswer is insufficient or does not match reference concepts."
+        },
+        {
+            "question": "3",
+            "marks": 0.0,
+            "max_marks": 2.0,
+            "semantic_score": 0.1182,
+            "confidence": 0.5,
+            "feedback": "Awarded 0 out of 2 marks (0.0%). Semantic similarity: 12%, Confidence: 50%.\nAnswer is insufficient or does not match reference concepts."
+        },
+        {
+            "question": "4",
+            "marks": 0.0,
+            "max_marks": 3.0,
+            "semantic_score": 0.0,
+            "confidence": 1.0,
+            "feedback": "No answer provided for Question 4. Awarded 0 marks."
+        },
+        {
+            "question": "5",
+            "marks": 0.0,
+            "max_marks": 1.0,
+            "semantic_score": 0.0,
+            "confidence": 1.0,
+            "feedback": "No answer provided for Question 5. Awarded 0 marks."
+        },
+        {
+            "question": "6",
+            "marks": 0.0,
+            "max_marks": 1.0,
+            "semantic_score": 0.0,
+            "confidence": 1.0,
+            "feedback": "No answer provided for Question 6. Awarded 0 marks."
+        }
+    ]
+}

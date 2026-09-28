@@ -1,0 +1,5 @@
+{
+    "1": "Object Oriented Programming (OOP) organizes software design around data or objects rather than functions. Its four foundational pillars are Encapsulation (binding data and functions together into a class), Abstraction (exposing only essential features while concealing implementation details), Inheritance (subclasses inheriting state and behavior from a parent class), and Polymorphism (ability of methods to behave differently based on the object instance).",
+    "2": "Polymorphism means 'many forms'. It enables a single interface to control access to a general class of actions. There are two types: Static/Compile-time polymorphism implemented through function or method overloading, and Dynamic/Runtime polymorphism implemented using virtual functions or method overriding in derived classes.",
+    "3": "Exception handling is used to intercept runtime anomalies to prevent abnormal program termination. The program places critical code inside a try block. When an error occurs, an exception is raised and caught by the catch/except handler. A finally block always runs regardless of whether an exception occurred, ensuring resources are released."
+}

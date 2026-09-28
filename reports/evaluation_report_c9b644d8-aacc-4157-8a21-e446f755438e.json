@@ -1,0 +1,36 @@
+{
+    "id": "c9b644d8-aacc-4157-8a21-e446f755438e",
+    "mode": "evaluate",
+    "model": "codbert_ft_v3",
+    "ocr_provider": "gemini",
+    "total_marks": 15.0,
+    "obtained_marks": 14.5,
+    "percentage": 96.67,
+    "overall_summary": "Script evaluated with codbert_ft_v3 (gemini OCR). Overall score: 14.5/15 (96.67%). Evaluated 3 descriptive question(s).",
+    "questions": [
+        {
+            "question": "1",
+            "marks": 5.0,
+            "max_marks": 5.0,
+            "semantic_score": 1.0,
+            "confidence": 0.99,
+            "feedback": "Awarded 5 out of 5 marks (100.0%). Semantic similarity: 100%, Confidence: 99%.\n\u2022 OOP Definition (1.0/1.0 marks): Criterion 'OOP Definition' thoroughly addressed.\n\u2022 Encapsulation & Abstraction (2.0/2.0 marks): Criterion 'Encapsulation & Abstraction' thoroughly addressed.\n\u2022 Inheritance & Polymorphism (2.0/2.0 marks): Criterion 'Inheritance & Polymorphism' thoroughly addressed."
+        },
+        {
+            "question": "2",
+            "marks": 5.0,
+            "max_marks": 5.0,
+            "semantic_score": 1.0,
+            "confidence": 0.9444,
+            "feedback": "Awarded 5 out of 5 marks (100.0%). Semantic similarity: 100%, Confidence: 94%.\n\u2022 Polymorphism Definition (1.0/1.0 marks): Criterion 'Polymorphism Definition' thoroughly addressed.\n\u2022 Compile-time Overloading (2.0/2.0 marks): Criterion 'Compile-time Overloading' thoroughly addressed.\n\u2022 Runtime Overriding (2.0/2.0 marks): Criterion 'Runtime Overriding' thoroughly addressed."
+        },
+        {
+            "question": "3",
+            "marks": 4.5,
+            "max_marks": 5.0,
+            "semantic_score": 1.0,
+            "confidence": 0.9586,
+            "feedback": "Awarded 4.5 out of 5 marks (90.0%). Semantic similarity: 100%, Confidence: 96%.\n\u2022 Purpose & Mechanism (1.0/1.5 marks): Criterion 'Purpose & Mechanism' partially covered. Lacks full depth.\n\u2022 Try and Catch Blocks (2.0/2.0 marks): Criterion 'Try and Catch Blocks' thoroughly addressed.\n\u2022 Finally Block & Cleanup (1.5/1.5 marks): Criterion 'Finally Block & Cleanup' thoroughly addressed."
+        }
+    ]
+}

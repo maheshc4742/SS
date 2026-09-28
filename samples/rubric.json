@@ -1,0 +1,53 @@
+{
+    "1": {
+        "max_marks": 5.0,
+        "criteria": [
+            {
+                "criterion": "OOP Definition",
+                "marks": 1.0
+            },
+            {
+                "criterion": "Encapsulation & Abstraction",
+                "marks": 2.0
+            },
+            {
+                "criterion": "Inheritance & Polymorphism",
+                "marks": 2.0
+            }
+        ]
+    },
+    "2": {
+        "max_marks": 5.0,
+        "criteria": [
+            {
+                "criterion": "Polymorphism Definition",
+                "marks": 1.0
+            },
+            {
+                "criterion": "Compile-time Overloading",
+                "marks": 2.0
+            },
+            {
+                "criterion": "Runtime Overriding",
+                "marks": 2.0
+            }
+        ]
+    },
+    "3": {
+        "max_marks": 5.0,
+        "criteria": [
+            {
+                "criterion": "Purpose & Mechanism",
+                "marks": 1.5
+            },
+            {
+                "criterion": "Try and Catch Blocks",
+                "marks": 2.0
+            },
+            {
+                "criterion": "Finally Block & Cleanup",
+                "marks": 1.5
+            }
+        ]
+    }
+}

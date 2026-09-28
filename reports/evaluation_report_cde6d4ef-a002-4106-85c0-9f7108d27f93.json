@@ -1,0 +1,36 @@
+{
+    "id": "cde6d4ef-a002-4106-85c0-9f7108d27f93",
+    "mode": "evaluate",
+    "model": "codbert_base",
+    "ocr_provider": "gemini",
+    "total_marks": 15.0,
+    "obtained_marks": 7.5,
+    "percentage": 50.0,
+    "overall_summary": "Script evaluated with codbert_base (gemini OCR). Overall score: 7.5/15 (50.0%). Evaluated 3 descriptive question(s).",
+    "questions": [
+        {
+            "question": "1",
+            "marks": 2.0,
+            "max_marks": 5.0,
+            "semantic_score": 0.2997,
+            "confidence": 0.5,
+            "feedback": "Awarded 2 out of 5 marks (40.0%). Semantic similarity: 30%, Confidence: 50%.\n\u2022 OOP Definition (0.0/1.0 marks): Criterion 'OOP Definition' missing or insufficient in the response.\n\u2022 Encapsulation & Abstraction (1.0/2.0 marks): Criterion 'Encapsulation & Abstraction' partially covered. Lacks full depth.\n\u2022 Inheritance & Polymorphism (1.0/2.0 marks): Criterion 'Inheritance & Polymorphism' partially covered. Lacks full depth."
+        },
+        {
+            "question": "2",
+            "marks": 2.5,
+            "max_marks": 5.0,
+            "semantic_score": 0.3717,
+            "confidence": 0.5,
+            "feedback": "Awarded 2.5 out of 5 marks (50.0%). Semantic similarity: 37%, Confidence: 50%.\n\u2022 Polymorphism Definition (0.5/1.0 marks): Criterion 'Polymorphism Definition' partially covered. Lacks full depth.\n\u2022 Compile-time Overloading (1.0/2.0 marks): Criterion 'Compile-time Overloading' partially covered. Lacks full depth.\n\u2022 Runtime Overriding (1.0/2.0 marks): Criterion 'Runtime Overriding' partially covered. Lacks full depth."
+        },
+        {
+            "question": "3",
+            "marks": 3.0,
+            "max_marks": 5.0,
+            "semantic_score": 0.4943,
+            "confidence": 0.5374,
+            "feedback": "Awarded 3 out of 5 marks (60.0%). Semantic similarity: 49%, Confidence: 54%.\n\u2022 Purpose & Mechanism (0.5/1.5 marks): Criterion 'Purpose & Mechanism' partially covered. Lacks full depth.\n\u2022 Try and Catch Blocks (1.5/2.0 marks): Criterion 'Try and Catch Blocks' partially covered. Lacks full depth.\n\u2022 Finally Block & Cleanup (1.0/1.5 marks): Criterion 'Finally Block & Cleanup' partially covered. Lacks full depth."
+        }
+    ]
+}
