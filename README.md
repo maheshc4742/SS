@@ -25,7 +25,7 @@ ScriptSense is a production-ready, modular web application for automated evaluat
 * **JSON Answer Scripts**: Automatically bypass OCR and proceed straight to semantic grading.
 
 ### 3. Rubric-Based Grading with 0.5 Quantization
-* Evaluates descriptive answers according to weighted sub-criteria defined in the rubric JSON.
+* Evaluates descriptive answers using weighted sub-criteria or prose rubrics aligned with numbered answer-key points.
 * **Fraction Rule**: Strictly keeps marks as **whole numbers or half-integers (`.5`)** (e.g., 0, 0.5, 1.0, 1.5 ... up to max marks).
 
 ### 4. Versioned Model Fine-Tuning Pipeline
@@ -46,7 +46,7 @@ ScriptSense/
 │   │   ├── hitl.py                 # Train Mode & HITL endpoints
 │   │   ├── training.py             # Training stats & fine-tuning trigger
 │   │   ├── models_api.py           # Model registry & activation
-│   │   └── config_api.py           # Dynamic settings & sample presets
+│   │   └── config_api.py           # Dynamic application settings
 │   ├── core/
 │   │   ├── config.py               # Pydantic Settings & environment
 │   │   └── database.py             # SQLite engine & sessionmaker
@@ -82,7 +82,6 @@ ScriptSense/
 │   ├── codbert_base/               # Baseline model checkpoint
 │   └── codbert_ft_v1/              # Fine-tuned model checkpoints
 ├── reports/                        # Saved evaluation JSON reports
-├── samples/                        # Sample PDFs, images, and JSON scripts
 ├── tests/
 │   └── test_scriptsense.py         # Pytest verification suite
 ├── .env.example
@@ -120,7 +119,8 @@ cp .env.example .env
 ```
 Edit `.env` to configure:
 * `OCR_PROVIDER`: `gemini` or `qwen`
-* `GEMINI_API_KEY`: Your Gemini API key (optional for offline simulation)
+* `GEMINI_API_KEY`: Required for image/PDF OCR with Gemini. JSON answer scripts can be evaluated without OCR credentials.
+* `GEMINI_MODEL`: Gemini model for OCR (default: `gemini-3.8-flash`).
 * `QWEN_BASE_URL`: Local Qwen endpoint (e.g. `http://127.0.0.1:1234/v1`)
 * `MIN_TRAINING_SAMPLES`: Threshold to enable fine-tuning (e.g. `10`)
 
